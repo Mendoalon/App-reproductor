@@ -3,13 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomePageComponent } from './modules/home/pages/home-page/home-page.component';
 
 
-const routes: Routes = [
+const routes: Routes = [ //TODO: router-outlet (Padre)
   {
-    path: 'auth', 
+    path: 'auth',  //TODO: (Public) Login, Register, Forgot...
     loadChildren: () => import(`./modules/auth/auth.module`).then(m => m.AuthModule)
   },
-  { //TODO: ruta principal.
-    path: '', 
+  { 
+    path: '', //TODO: (Private) 
     component:HomePageComponent,
     loadChildren: () => import(`./modules/home/home.module`).then(m => m.HomeModule)
   }
