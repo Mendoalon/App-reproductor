@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, tap } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +11,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private readonly URL = environment.api;
 
-  constructor(  private router: Router,
-                private cookie: CookieService, 
+  constructor(  private cookie: CookieService, 
                 private http: HttpClient) {}
 
   sendCredencials(email: string, password: string): Observable<any> {
@@ -25,7 +24,6 @@ export class AuthService {
       tap((respuestaOk: any) => {
         const { tokenSession, data } = respuestaOk;
         this.cookie.set('token', tokenSession, 4, '/');
-        this.router.navigate(['/tracks']);
       })
     );
   }
