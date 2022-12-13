@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TrackModel } from '@core/models/tracks.model';
 import { TrackService } from '../../services/track.service';
 import { Subscription } from 'rxjs';
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './track-page.component.html',
   styleUrls: ['./track-page.component.css']
 })
-export class TrackPageComponent implements OnInit, OnDestroy {
+export class TrackPageComponent implements OnInit {
   tracksTrending: Array<TrackModel>= []
   tracksRandom: Array<TrackModel>= []
 
@@ -17,6 +17,13 @@ export class TrackPageComponent implements OnInit, OnDestroy {
   constructor( private _trackService: TrackService) { }
 
   ngOnInit(): void {
+   this.loadDataAll();
+   this.loadDataRandom(); 
+  
+  }
+
+
+  loadDataAll(): void {
     this._trackService.getAllTracks$().subscribe(
       (response: TrackModel[]) =>{
         this.tracksTrending = response; 
@@ -25,8 +32,14 @@ export class TrackPageComponent implements OnInit, OnDestroy {
     )
   }
 
-  ngOnDestroy(): void {
-      
+  loadDataRandom(): void {
+    this._trackService.getAllRandom$().subscribe(
+      (response: TrackModel[]) =>{
+        this.tracksRandom = response;
+      }
+    )
   }
+
+
 
 }

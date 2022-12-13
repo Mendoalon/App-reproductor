@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { HttpClient  } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
@@ -22,17 +22,26 @@ export class TrackService {
   getAllTracks$(): Observable<any>{
     return this.httpClient.get(`${this.URL}/tracks`).pipe(
       map(({ data }: any)=>{
-        return data
+        return data;
       })
     )
   }
 
+   //TODO: Devuelve todas la canciones Random. 
   getAllRandom$(): Observable<any>{
     return this.httpClient.get(`${this.URL}/tracks`).pipe(
       map(({ data }: any)=>{
-        return data
+        return  data.reverse();
+      }),
+      catchError((err)=>{
+           console.log('Error', err.status);
+           
+        return of([])
       })
     )
   }
+
+
+
 
 }
