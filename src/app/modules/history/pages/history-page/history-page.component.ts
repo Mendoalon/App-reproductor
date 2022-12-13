@@ -12,4 +12,9 @@ export class HistoryPageComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  receiveData(event: string): void {
+    console.log(event);
+    
+  }
+
 }
