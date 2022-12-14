@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TrackModel } from '@core/models/tracks.model';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+
 import { Subscription } from 'rxjs';
 import { MultimediaService } from '../../services/multimedia.service';
 
@@ -9,26 +9,25 @@ import { MultimediaService } from '../../services/multimedia.service';
   styleUrls: ['./media-player.component.css']
 })
 export class MediaPlayerComponent implements OnInit, OnDestroy {
-  mockCover: TrackModel = {
-    name: "Getting Over",
-    album: "One Love",
-    cover: "https://jenesaispop.com/wp-content/uploads/2009/09/guetta_onelove.jpg",
-    url: "http://localhost:3000/track.mp3",
-    _id: 1
-  }
+  estado: string = 'pause';
+  @ViewChild('progresoBar') progresoBar: ElementRef = new ElementRef('');
 
   listaObservadores$: Array<Subscription> = [];
 
-  constructor(private _multimediaService: MultimediaService) { }
+  constructor(public _multimediaService: MultimediaService) { }
 
   ngOnInit(): void {
-    const observer1$: Subscription = this._multimediaService.callback.subscribe(
-      (response: TrackModel) => {
-
-      }
+    const observer1$ = this._multimediaService.playerEstado$.subscribe(
+      status =>  {this.estado = status
+      console.log(this.estado );
+    }
+      
     )
-
     this.listaObservadores$ = [observer1$];
+
+    console.log(this._multimediaService.audio.addEventListener.prototype);
+    
+
   }
 
 
@@ -37,4 +36,18 @@ export class MediaPlayerComponent implements OnInit, OnDestroy {
 
   }
 
+  //TODO: Funcion para edelantar y retrasar cancion.
+  posicion(event: MouseEvent): void {
+    const elNative: HTMLElement = this.progresoBar.nativeElement;
+    const { clientX } = event;
+    const {x, width } = elNative.getBoundingClientRect();
+    const clickX = clientX - x ;
+    const porcentajefrenteX = (clickX * 100) / width
+
+    this._multimediaService.BusquedaAudio(porcentajefrenteX);
+    
+
+  }
+  
+  
 }
